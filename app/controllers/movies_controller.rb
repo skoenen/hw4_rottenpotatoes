@@ -1,40 +1,63 @@
 class MoviesController < ApplicationController
 
+  def ratings
+    @all_ratings = Movie.all_ratings
+    @selected_ratings = params[:ratings] || session[:ratings] || {}
+
+    if @selected_ratings == {}
+      @selected_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
+    end
+  end
+
+  def sort
+    @sort = params.fetch( :sort, session.fetch( :sort , nil ) )
+  end
+
+  def ratings_restpath
+    sort()
+    ratings()
+    if params[:ratings] != session[:ratings] and @selected_ratings != {}
+      session[:sort] = @sort
+      session[:ratings] = @selected_ratings
+      flash.keep
+      redirect_to :sort => sort, :ratings => @selected_ratings and return
+    end
+  end
+
+  def sort_restpath
+    sort()
+    ratings()
+    if params[:sort] != session[:sort]
+      session[:sort] = @sort
+      flash.keep
+      redirect_to :sort => @sort, :ratings => @selected_ratings and return
+    end
+  end
+
+  def index
+    @page = {}
+    ratings_restpath()
+    sort_restpath()
+
+    case @sort
+    when 'title'
+      ordering,@title_header = {:order => :title}, 'hilite'
+    when 'release_date'
+      ordering,@date_header = {:order => :release_date}, 'hilite'
+    end
+
+    @page[:title] = "All Movies"
+    @page[:filter] = true
+    @page[:sort] = true
+    @movies = Movie.find_all_by_rating(@selected_ratings.keys, ordering)
+  end
+
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
 
-  def index
-    sort = params[:sort] || session[:sort]
-    case sort
-    when 'title'
-      ordering,@title_header = {:order => :title}, 'hilite'
-    when 'release_date'
-      ordering,@date_header = {:order => :release_date}, 'hilite'
-    end
-    @all_ratings = Movie.all_ratings
-    @selected_ratings = params[:ratings] || session[:ratings] || {}
-    
-    if @selected_ratings == {}
-      @selected_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
-    end
-    
-    if params[:sort] != session[:sort]
-      session[:sort] = sort
-      flash.keep
-      redirect_to :sort => sort, :ratings => @selected_ratings and return
-    end
-
-    if params[:ratings] != session[:ratings] and @selected_ratings != {}
-      session[:sort] = sort
-      session[:ratings] = @selected_ratings
-      flash.keep
-      redirect_to :sort => sort, :ratings => @selected_ratings and return
-    end
-    @movies = Movie.find_all_by_rating(@selected_ratings.keys, ordering)
-  end
 
   def new
     # default: render 'new' template
@@ -62,6 +85,26 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
+  end
+
+  def similar_to
+    @movie = Movie.find( params[:movie] )
+    if @movie.director != ''
+      ratings()
+      sort()
+
+      @movies = @movie.similar_to
+
+      @page = {}
+      @page[:title] = "Similar Movies to '#{@movie.title}':"
+      @page[:filter] = false
+      @page[:sort] = false
+
+      render "movies/index"
+    else
+      flash[:notice] = "The movie '#{@movie.title}' has no director info"
+      redirect_to "/"
+    end
   end
 
 end

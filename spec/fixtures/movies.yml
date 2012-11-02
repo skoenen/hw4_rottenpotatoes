@@ -1,0 +1,98 @@
+aladdin:
+  id: 1
+  title: Aladdin
+  rating: G
+  director: ""
+  release_date: 25-Nov-1992
+
+terminator:
+  id: 2
+  title: The Terminator
+  rating: R
+  director: ""
+  release_date: 26-Oct-1984
+
+harry_met_sally:
+  id: 3
+  title: When Harry Met Sally
+  rating: R
+  director: ""
+  release_date: 21-Jul-1989
+
+help:
+  id: 4
+  title: The Help
+  rating: PG-13
+  director: ""
+  release_date: 10-Aug-2011
+
+chocolat:
+  id: 5
+  title: Chocolat
+  rating: PG-13
+  director: ""
+  release_date: 5-Jan-2001
+
+amelie:
+  id: 6
+  title: Amelie
+  rating: R
+  director: ""
+  release_date: 25-Apr-2001
+
+odyssey:
+  id: 7
+  title: '2001: A Space Odyssey'
+  rating: G
+  director: ""
+  release_date: 6-Apr-1968
+
+incredibles:
+  id: 8
+  title: The Incredibles
+  rating: PG
+  director: ""
+  release_date: 5-Nov-2004
+
+raiders:
+  id: 9
+  title: Raiders of the Lost Ark
+  rating: PG
+  director: ""
+  release_date: 12-Jun-1981
+
+chicken_run:
+  id: 10
+  title: Chicken Run
+  rating: G
+  director: ""
+  release_date: 21-Jun-2000
+
+star_wars:
+  id: 11
+  title: Star Wars
+  rating: PG
+  director: George Lucas
+  release_date: 6-Apr-1968
+
+blade_runner:
+  id: 12
+  title: Blade Runner
+  rating: PG
+  director: Ridley Scott
+  release_date: 5-Nov-2004
+
+alien:
+  id: 13
+  title: Alien
+  rating: R
+  director: ""
+  release_date: 12-Jun-1981
+
+thx_1138:
+  id: 14
+  title: THX-1138
+  rating: R
+  director: George Lucas
+  release_date: 21-Jun-2000
+
